@@ -28,7 +28,7 @@ namespace Commander
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<ICommanderRepository, MockCommanderRepository>();
+            services.AddScoped<ICommanderRepository, SqlCommanderRepository>();
             services.AddDbContext<CommanderContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
         }
 
