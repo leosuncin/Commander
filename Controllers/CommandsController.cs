@@ -82,5 +82,18 @@ namespace Commander.Controllers
 
             return Ok(_mapper.Map<CommandReadDTO>(command));
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeleteCommand(int id)
+        {
+            var command = _repo.GetCommandById(id);
+
+            if (command == null) return NotFound();
+
+            _repo.DeleteCommand(command);
+            _repo.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
