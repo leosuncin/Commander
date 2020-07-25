@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using Commander.Data;
 using Commander.DTOs;
+using Commander.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Commander.Controllers
@@ -27,7 +28,7 @@ namespace Commander.Controllers
             return Ok(_mapper.Map<IEnumerable<CommandReadDTO>>(commands));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCommandById")]
         public ActionResult<CommandReadDTO> GetCommandById(int id)
         {
             var command = _repo.GetCommandById(id);
@@ -35,6 +36,16 @@ namespace Commander.Controllers
             if (command == null) return NotFound();
 
             return Ok(_mapper.Map<CommandReadDTO>(command));
+        }
+
+        [HttpPost]
+        public ActionResult<CommandReadDTO> CreateCommand(CommandCreateDTO newCommand)
+        {
+            var command = _mapper.Map<Command>(newCommand);
+            _repo.CreateCommand(command);
+            _repo.SaveChanges();
+
+            return CreatedAtRoute(nameof(GetCommandById), new { Id = command.Id }, _mapper.Map<CommandReadDTO>(command));
         }
     }
 }
