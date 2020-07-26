@@ -29,9 +29,11 @@ namespace Commander
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration["DB_CONNECTION_STRING"] ?? Configuration.GetConnectionString("DefaultConnection");
+
             services.AddControllers().AddNewtonsoftJson(setup => setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
             services.AddScoped<ICommanderRepository, SqlCommanderRepository>();
-            services.AddDbContext<CommanderContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<CommanderContext>(options => options.UseNpgsql(connectionString));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
