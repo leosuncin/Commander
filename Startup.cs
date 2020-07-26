@@ -53,6 +53,8 @@ namespace Commander
             {
                 endpoints.MapControllers();
             });
+
+            PrepDB.PrepPopulation(app);
         }
     }
 }
