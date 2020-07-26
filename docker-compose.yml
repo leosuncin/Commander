@@ -16,3 +16,11 @@ services:
       DATABASE_URL: postgres://postgres@postgres:5432/postgres?sslmode=disable
     ports:
       - "8091:8081"
+  api:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      DB_CONNECTION_STRING: "Host=postgres; Username=postgres; Database=postgres; Pooling=true;"
+    ports:
+      - "8080:80"
