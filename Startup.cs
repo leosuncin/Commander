@@ -35,6 +35,7 @@ namespace Commander
             services.AddScoped<ICommanderRepository, SqlCommanderRepository>();
             services.AddDbContext<CommanderContext>(options => options.UseNpgsql(connectionString));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddHealthChecks();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +55,7 @@ namespace Commander
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
 
             PrepDB.PrepPopulation(app);
