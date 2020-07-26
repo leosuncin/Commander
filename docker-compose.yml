@@ -40,3 +40,9 @@ services:
       DB_CONNECTION_STRING: "Host=postgres; Username=postgres; Database=postgres; Pooling=true;"
     ports:
       - "8080:80"
+    restart: on-failure
+    healthcheck:
+      test: curl --fail http://localhost/health || exit
+      interval: 10s
+      timeout: 5s
+      retries: 5
