@@ -21,9 +21,20 @@ services:
       DATABASE_URL: postgres://postgres@postgres:5432/postgres?sslmode=disable
     ports:
       - "8091:8081"
+  migration:
+    image: mcr.microsoft.com/dotnet/core/sdk:3.1
+    working_dir: /app
+    volumes:
+      - "./:/app"
+    depends_on:
+      - postgres
+    environment:
+      DB_CONNECTION_STRING: "Host=postgres; Username=postgres; Database=postgres; Pooling=true;"
+    command: bash -c "dotnet restore && dotnet tool restore && dotnet tool run dotnet-ef database update"
   api:
     build: .
     depends_on:
+      - migration
       - postgres
     environment:
       DB_CONNECTION_STRING: "Host=postgres; Username=postgres; Database=postgres; Pooling=true;"
